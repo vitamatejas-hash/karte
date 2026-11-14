@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Animations Demo</title>
+  <style>
+    /* Basic page setup */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #222222;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    /* Container where the animation happens */
+    .stage {
+      width: 100%;
+      height: 120px;
+      background-color: #f0f0f0;
+      border: 2px solid #333333;
+      padding: 28px 15px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    /* The animated square */
+    .box {
+      width: 60px;
+      height: 60px;
+      background-color: #3498db;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Keyframes */
+    @keyframes moveRight {
+      0% {
+        transform: translateX(0px);
+        background-color: #e74c3c;
+      }
+      100% {
+        transform: translateX(200px);
+        background-color: #2ecc71;
+      }
+    }
+
+    @keyframes colorChange {
+      0% {
+        background-color: #e74c3c;
+      }
+      50% {
+        background-color: #f1c40f;
+      }
+      100% {
+        background-color: #2ecc71;
+      }
+    }
+
+    @keyframes bounce {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-22px);
+      }
+      100% {
+        transform: translateY(15px);
+      }
+    }
+
+    /* Replay button */
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #3498db;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 14px;
+    }
+
+    button:active {
+      background-color: #2980b9;
+    }
+
+    /* Code preview block */
+    pre {
+      background-color: #f8f8f8;
+      border: 1px solid #cccccc;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin-top: 0;
+      margin-bottom: 18px;
+    }
+
+    /* Form controls */
+    .control-group {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #999999;
+      border-radius: 4px;
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CSS Animations Demo</h1>
+
+  <!-- Animation Preview Box -->
+  <div class="stage">
+    <div id="box" class="box">.box</div>
+  </div>
+
+  <!-- Replay Button -->
+  <button id="replayBtn">Replay Animation</button>
+
+  <!-- Live CSS Output -->
+  <pre id="cssCode"></pre>
+
+  <!-- Dropdown Controls -->
+  <div class="control-group">
+    <label for="animName">animation-name:</label>
+    <select id="animName">
+      <option value="moveRight" selected>moveRight</option>
+      <option value="colorChange">colorChange</option>
+      <option value="bounce">bounce</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label for="animDuration">animation-duration:</label>
+    <select id="animDuration">
+      <option value="1s">1s</option>
+      <option value="2s" selected>2s</option>
+      <option value="3s">3s</option>
+      <option value="5s">5s</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label for="animTiming">animation-timing-function:</label>
+    <select id="animTiming">
+      <option value="ease" selected>ease</option>
+      <option value="linear">linear</option>
+      <option value="ease-in">ease-in</option>
+      <option value="ease-out">ease-out</option>
+      <option value="ease-in-out">ease-in-out</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label for="animDelay">animation-delay:</label>
+    <select id="animDelay">
+      <option value="0s" selected>0s</option>
+      <option value="1s">1s</option>
+      <option value="2s">2s</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label for="animIteration">animation-iteration-count:</label>
+    <select id="animIteration">
+      <option value="1">1</option>
+      <option value="3">3</option>
+      <option value="infinite" selected>infinite</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label for="animDirection">animation-direction:</label>
+    <select id="animDirection">
+      <option value="normal">normal</option>
+      <option value="reverse">reverse</option>
+      <option value="alternate" selected>alternate</option>
+      <option value="alternate-reverse">alternate-reverse</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label for="animFill">animation-fill-mode:</label>
+    <select id="animFill">
+      <option value="none" selected>none</option>
+      <option value="forwards">forwards</option>
+      <option value="backwards">backwards</option>
+      <option value="both">both</option>
+    </select>
+  </div>
+
+  <script>
+    const box = document.getElementById("box");
+    const cssCode = document.getElementById("cssCode");
+    const replayBtn = document.getElementById("replayBtn");
+
+    const nameSelect = document.getElementById("animName");
+    const durationSelect = document.getElementById("animDuration");
+    const timingSelect = document.getElementById("animTiming");
+    const delaySelect = document.getElementById("animDelay");
+    const iterationSelect = document.getElementById("animIteration");
+    const directionSelect = document.getElementById("animDirection");
+    const fillSelect = document.getElementById("animFill");
+
+    function updateAnimation() {
+      const name = nameSelect.value;
+      const duration = durationSelect.value;
+      const timing = timingSelect.value;
+      const delay = delaySelect.value;
+      const iteration = iterationSelect.value;
+      const direction = directionSelect.value;
+      const fill = fillSelect.value;
+
+      // Reset animation so it restarts from the beginning
+      box.style.animation = "none";
+      void box.offsetWidth;
+
+      // Apply selected CSS animation properties
+      box.style.animationName = name;
+      box.style.animationDuration = duration;
+      box.style.animationTimingFunction = timing;
+      box.style.animationDelay = delay;
+      box.style.animationIterationCount = iteration;
+      box.style.animationDirection = direction;
+      box.style.animationFillMode = fill;
+
+      // Update the code block text
+      cssCode.textContent =
+`.box {
+  animation-name: ${name};
+  animation-duration: ${duration};
+  animation-timing-function: ${timing};
+  animation-delay: ${delay};
+  animation-iteration-count: ${iteration};
+  animation-direction: ${direction};
+  animation-fill-mode: ${fill};
+}`;
+    }
+
+    // Re-run whenever any dropdown changes or Replay is clicked
+    const allSelects = document.querySelectorAll("select");
+    allSelects.forEach(function(select) {
+      select.addEventListener("change", updateAnimation);
+    });
+
+    replayBtn.addEventListener("click", updateAnimation);
+
+    // Run once when page loads
+    updateAnimation();
+  </script>
+
+</body>
+</html>
